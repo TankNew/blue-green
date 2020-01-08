@@ -7,7 +7,7 @@ export default function({ $axios, store, app, redirect }) {
       /**开发测试 */
       const multiTenancyHeader = 'Abp.TenantId'
       const multiTenancy = app.$cookies.get(multiTenancyHeader)
-      config.headers.common[multiTenancyHeader] = 9
+      config.headers.common[multiTenancyHeader] = 16
       /**开发测试 over*/
 
       return config

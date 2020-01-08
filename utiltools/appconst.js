@@ -12,6 +12,7 @@ const AppConsts = {
     appName: 'EDE.CMS',
     appBaseUrl: 'http://localhost:3000',
     appVersion: 'V5.1',
-    remoteServiceBaseUrl: url
+    // remoteServiceBaseUrl: url
+    remoteServiceBaseUrl: 'https://cms.ednet.cn'
 }
 export default AppConsts
