@@ -8,18 +8,43 @@
 @navbar-dark-disabled-color: #ccc;
 @navbar-dark-active-color: #fff;
 @navbar-dark-toggler-border-color: #eee;
+.green-btn {
+  cursor: pointer;
+  font-weight: normal;
+  color: white;
+  background-color: @green;
+  border-radius: 20px;
+  padding: 2px 20px;
+  &:hover,
+  &:active {
+    background-color: #669900;
+    box-shadow: 0 0 0 2px rgba(72, 243, 4, 0.2);
+  }
+}
 header {
+  background-color: #fff;
   .header-title {
     font-weight: bold;
-    padding: 10px;
+    padding: 20px 10px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    margin-top: 35px;
+    @media (min-width: 576px) {
+      margin-top: 0;
+    }
     .logo {
+      margin-right: 4px;
       > img {
-        height: 60px;
+        height: 30px;
+        @media (min-width: 576px) {
+          height: 45px;
+        }
         @media (min-width: 768px) {
+          height: 60px;
+        }
+        @media (min-width: 992px) {
           height: 75px;
         }
         @media (min-width: 1200px) {
@@ -28,51 +53,70 @@ header {
       }
     }
     .company-name {
-      display: none;
+      flex-grow: 1;
+      color: @dark-blue;
+      font-size: 16px;
+      @media (min-width: 576px) {
+        font-size: 22px;
+      }
       @media (min-width: 768px) {
-        display: block;
-        font-size: 28px;
-        color: @gray;
-        flex-grow: 1;
+        font-size: 26px;
+      }
+      @media (min-width: 992px) {
       }
       @media (min-width: 1200px) {
-        font-size: 36px;
+        font-size: 30px;
       }
     }
-    .contact-info {
+    .toolbar {
+      .green-btn;
       display: none;
-      @media (min-width: 768px) {
+      @media (min-width: 576px) {
         display: block;
-        letter-spacing: 1px;
-        .phone {
-          display: block;
-          color: @orange;
-          margin-bottom: 6px;
-        }
-        .weixin {
-          display: block;
-          color: @green;
-        }
       }
     }
   }
+
+  .fixed-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    height: 35px;
+    width: 100%;
+    padding: 10px;
+    background-color: @blue;
+    color: white;
+    z-index: 99;
+    @media (min-width: 576px) {
+      display: none;
+    }
+    .tel {
+      font-size: 14px;
+    }
+  }
 }
-.bg-orange {
+
+.bg-blue {
   color: white;
-  background-color: @orange !important;
+  background-color: @blue;
+  @media (min-width: 992px) {
+  }
 }
-.navbar-orange {
+.navbar-blue {
   padding-left: 0;
   padding-right: 0;
   font-size: 14px;
-  @media (min-width: 768px) {
+  @media (min-width: 992px) {
     font-size: 16px;
     padding-top: 0;
     padding-bottom: 0;
   }
   .navbar-brand {
     color: @navbar-dark-brand-color;
-    font-size: 14px;
+    font-size: 16px;
     padding-left: 20px;
     &:hover,
     &:focus {
@@ -86,14 +130,7 @@ header {
   .navbar-nav {
     margin-right: auto;
     margin-left: auto;
-    @media (min-width: 576px) {
-      max-width: 540px;
-    }
-
-    @media (min-width: 768px) {
-      max-width: 720px;
-    }
-
+    width: 100%;
     @media (min-width: 992px) {
       max-width: 960px;
     }
@@ -107,7 +144,7 @@ header {
       &:hover,
       &:focus {
         color: @navbar-dark-hover-color;
-        background-color: @dark-orange;
+        background-color: @light-blue;
       }
 
       &.disabled {
@@ -120,12 +157,13 @@ header {
     .nav-link.show,
     .nav-link.active {
       color: @navbar-dark-active-color;
-      background-color: @dark-orange;
+      background-color: @light-blue;
     }
   }
 
   .navbar-toggler {
     margin-right: 10px;
+    padding: 2px 6px;
     color: @navbar-dark-color;
     border-color: @navbar-dark-toggler-border-color;
   }
@@ -133,7 +171,12 @@ header {
   .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   }
-
+  .navbar-nav {
+    margin-top: 10px;
+    @media (min-width: 992px) {
+      margin-top: 0;
+    }
+  }
   .navbar-text {
     color: @navbar-dark-color;
     a {
@@ -148,21 +191,23 @@ header {
   .dropdown-menu {
     margin-top: -1px;
     padding-top: 0;
+    padding-bottom: 0;
     border-top: none;
     min-width: 100%;
-    background-color: @dark-orange;
-
+    background-color: @light-blue;
+    @media (min-width: 992px) {
+      background-color: rgba(0, 0, 0, 0);
+    }
     a {
-      padding-left: 30px;
+      padding: 10px 10px 10px 30px;
       color: #fff;
-      background-color: @dark-orange;
+      font-size: 14px;
+      margin-bottom: 1px;
+      background-color: @blue-rgba;
+
       &:hover,
       &:focus {
-        background-color: @orange;
-      }
-      @media (min-width: 768px) {
-        padding-top: 6px;
-        padding-bottom: 6px;
+        background-color: @blue;
       }
     }
   }

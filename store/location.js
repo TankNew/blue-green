@@ -1,20 +1,21 @@
 const state = () => ({
-    data: { culture: 'zh-CN', headerName: '.AspNetCore.Culture' }
+  culture: '',
+  headerName: '.AspNetCore.Culture'
 })
 const mutations = {
-    set(state, val) {
-        state.data = val
-    }
+  setCulture(state, val) {
+    state.culture = val
+  }
 }
 const getters = {
-    getCulture(state) {
-        return state.data.culture
-    }
+  getCulture(state) {
+    return state.culture
+  }
 }
 const actions = {}
 export default {
-    state,
-    getters,
-    mutations,
-    actions
+  state,
+  getters,
+  mutations,
+  actions
 }

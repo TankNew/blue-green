@@ -1,19 +1,14 @@
 <template>
-  <div class="container">
+  <div class="container insider">
     <h4 class="page-title">
-      <span>{{ currentPathParent!==null?currentPathParent.displayName:currentPath.displayName }}</span>
+      <i class="fas fa-bookmark" />
+      <span>{{ currentPath.displayName }}</span>
     </h4>
-    <div v-if="currentPathParent!==null" class="page-inside-nav">
-      <dl>
-        <dd v-for="child in currentPathParent.children" :key="child.id">
-          <nuxt-link
-            :to="child.url"
-            :class="[child.id===currentPath.id?'active':'','white']"
-          >{{ child.displayName }}</nuxt-link>
-        </dd>
-      </dl>
-    </div>
     <div class="page-content">
+      <div class="page-news-info">
+        <img :src="currentPath.catalogGroup.cover" />
+        <p>{{ currentPath.catalogGroup.info }}</p>
+      </div>
       <div class="page-news-list">
         <ul>
           <li

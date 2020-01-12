@@ -1,33 +1,37 @@
 <template>
-  <div class="container">
+  <div class="container insider">
     <h4 class="page-title">
-      <span>联系我们</span>
+      <i class="fas fa-bookmark" />
+      <span>{{ currentPath.displayName }}</span>
     </h4>
     <div class="page-content">
       <div class="contactus">
-        <img class="img-fluid ad" src="~/assets/imgs/910x390px.jpg" />
         <ul class="address">
           <li>
             <label>
-              <i class="fas fa-id-card"></i>名称
+              <i class="fas fa-id-card"></i>
+              {{ $L(`CompanyName`) }}
             </label>
             {{ companyInfo.appName }}
           </li>
           <li>
             <label>
-              <i class="fas fa-map-marker-alt"></i>地址
+              <i class="fas fa-map-marker-alt"></i>
+              {{ $L(`Address`) }}
             </label>
             {{ companyInfo.appAddress }}
           </li>
           <li>
             <label>
-              <i class="fas fa-phone-volume"></i>电话
+              <i class="fas fa-phone-volume"></i>
+              {{ $L(`Tel`) }}
             </label>
             {{ companyInfo.tel }}
           </li>
           <li>
             <label>
-              <i class="fas fa-envelope"></i>邮箱
+              <i class="fas fa-envelope"></i>
+              {{ $L(`Email`) }}
             </label>
             {{ companyInfo.email }}
           </li>
@@ -44,7 +48,9 @@ export default {
   },
   computed: {
     ...mapState({
-      companyInfo: state => state.app.companyInfo
+      companyInfo: state => state.app.companyInfo,
+      currentPath: state => state.app.currentPath,
+      currentPathParent: state => state.app.currentPathParent
     })
   },
   created() {}

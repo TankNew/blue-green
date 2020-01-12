@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h4 class="page-title">
+      <i class="fas fa-bookmark" />
       <span>{{ catalogItem.title }}</span>
     </h4>
     <h6 class="page-sub-title">{{ formatDate(catalogItem.creationTime) }}</h6>
@@ -36,7 +37,9 @@
   </div>
 </template>
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import tools from '../../../../utiltools/tools'
+
 export default {
   data() {
     return {
@@ -58,6 +61,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      currentPath: state => state.app.currentPath
+    })
+  },
   async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
     const id = route.params.id
     const catalogItem = await store.dispatch('app/getCatalog', { params: { id } })
@@ -73,10 +81,11 @@ export default {
         path += 'product/' + catalogItem.catalogGroup.id
         break
     }
-    await store.dispatch('app/setcurrentPath', path)
-    return { catalogItem }
+    return { catalogItem, path }
   },
-  created() {},
+  created() {
+    this.$store.dispatch('app/setcurrentPath', { path: this.path, groupId: this.catalogItem.catalogGroup.parentId })
+  },
   mounted() {
     this.$nextTick(() => (this.isloaded = true))
     // this.mySwiper.slideTo(3, 1000, false)

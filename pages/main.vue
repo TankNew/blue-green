@@ -1,41 +1,27 @@
 <template>
   <div class="body-container">
     <header>
+      <div class="fixed-bar">
+        <div class="tel">
+          <i class="fas fa-phone-alt mr-1"></i>
+          {{ companyInfo.tel }}
+        </div>
+        <div>
+          <a @click="changeLanguage" class="green-btn">中/EN</a>
+        </div>
+      </div>
       <div class="header-title container">
         <div class="logo">
           <img :src="companyInfo.logo" />
         </div>
         <div class="company-name">{{ companyInfo.appName }}</div>
-        <div class="contact-info position-relative">
-          <a :href="'tel://'+ companyInfo.tel" class="phone">
-            <i class="fas fa-phone"></i>
-            <span>{{ companyInfo.tel }}</span>
-          </a>
-          <a
-            @click="isWeixinShow=true"
-            href="javascript:void(0)"
-            class="weixin"
-          >
-            <i class="fab fa-weixin"></i>
-            <span>官方微信公众平台</span>
-          </a>
-          <div v-show="isWeixinShow" class="wexin-code">
-            <div class="code">
-              <img :src="companyInfo.weixinBarCode" />
-              <h6>扫一扫，直接在手机上打开</h6>
-              <p>推荐微信、QQ扫一扫等扫码工具</p>
-            </div>
-            <span @click="isWeixinShow=false" class="close">
-              <i class="fas fa-times"></i>
-            </span>
-          </div>
+        <div class="toolbar">
+          <a @click="changeLanguage">中/EN</a>
         </div>
       </div>
-      <b-navbar toggleable="lg" type="orange" variant="orange">
-        <b-navbar-brand>{{ companyInfo.appName }}</b-navbar-brand>
-
+      <b-navbar toggleable="lg" type="blue" variant="blue">
+        <b-navbar-brand>{{ title }}</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
             <section v-for="item in navbars" :key="item.id">
@@ -63,93 +49,75 @@
       </b-navbar>
     </header>
     <section :class="['banner',currentPath.navbarType===5?'':'sub']">
-      <b-carousel
-        id="carousel-1"
-        v-model="slide"
-        :interval="4000"
-        controls
-        indicators
-        background="#fff"
-        style="text-shadow: 1px 1px 2px #333;"
-      >
-        <b-carousel-slide
-          v-for="(item, index) in bannerImgs"
-          :key="index"
-          :img-src="getImgUrl(item.imgUrl)"
-        >
-          <div :class="currentFontPosition(item)">
-            <h2>{{ item.title }}</h2>
-            <p>{{ item.subTitle }}</p>
+      <div v-swiper:mySwiper="swiperOption">
+        <div class="swiper-wrapper position-relative">
+          <div
+            v-for="(item, index) in bannerImgs"
+            :key="index"
+            class="swiper-slide"
+          >
+            <img :src="getImgUrl(item.imgUrl)" />
+            <div class="carousel-caption">
+              <div :class="currentFontPosition(item)">
+                <h2>{{ item.title }}</h2>
+                <p>{{ item.subTitle }}</p>
+              </div>
+            </div>
           </div>
-        </b-carousel-slide>
-      </b-carousel>
+        </div>
+        <div slot="button-prev" class="swiper-button-prev"></div>
+        <div slot="button-next" class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
+      </div>
     </section>
     <section class="main">
+      <div v-if="notHome" class="container mt-2">
+        <b-breadcrumb :items="breadCrumbItems"></b-breadcrumb>
+      </div>
       <nuxt-child ref="main" />
     </section>
     <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-10">
-            <ul class="footer-nav">
-              <li
-                :key="navi.id"
-                v-for="navi in navbars"
-                v-if="navi.navbarType!==5&&(!navi.url||(navi.displayName&&navi.displayName!=='联系我们'))"
-              >
-                <dl>
-                  <dt>
-                    <nuxt-link
-                      v-if="navi.url"
-                      :to="navi.url"
-                      class="white"
-                    >{{ navi.displayName }}</nuxt-link>
-                    <span v-else>{{ navi.displayName }}</span>
-                  </dt>
-                  <dd :key="child.id" v-for="child in navi.children">
-                    <nuxt-link
-                      :to="child.url"
-                      class="white"
-                    >{{ child.displayName }}</nuxt-link>
-                  </dd>
-                </dl>
-              </li>
-            </ul>
-          </div>
-          <div class="col-md-2 col-sm-12 contact-info">
-            <h5>咨询热线</h5>
-            <h5>{{ companyInfo.tel }}</h5>
-            <p>http://www.ydnyx.com</p>
-            <p>
-              <img :src="companyInfo.weixinBarCode" style="width:120px" />
-            </p>
-          </div>
-        </div>
-        <div class="partner">
-          <dl>
-            <dt>友情链接</dt>
-            <dd v-for="item in partners.items" :key="item.id">
-              <a :href="item.url" class="white" target="_blank">
-                <span>{{ item.title }}</span>
-              </a>
-            </dd>
-          </dl>
-        </div>
+      <div class="contact-info container">
+        <ul>
+          <li>
+            <i class="fas fa-map-marked-alt mr-2 fa-1x"></i>
+            <div>
+              <span>{{ Address }}:</span>
+              <span class="val">{{ companyInfo.appAddress }}</span>
+            </div>
+          </li>
+          <li>
+            <i class="fas fa-phone-alt mr-2 fa-1x"></i>
+            <div>
+              <span>{{ Tel }}:</span>
+              <span class="val">{{ companyInfo.tel }}</span>
+            </div>
+          </li>
+
+          <li>
+            <i class="fas fa-envelope mr-2 fa-1x"></i>
+            <div>
+              <span>{{ Email }}:</span>
+              <span class="val">{{ companyInfo.email }}</span>
+            </div>
+          </li>
+        </ul>
       </div>
-    </footer>
-    <div class="footer-bottom">
-      <div class="container">
+      <div class="container icp">
         <dl>
           <dd>{{ companyInfo.appName }}</dd>
-          <dd>http://www.ydnyx.com</dd>
           <dd>津ICP备案</dd>
           <dd>
             技术支持：
-            <a href="https://www.ednet.cn" target="_blank">e德互联</a>
+            <a
+              href="https://www.ednet.cn"
+              class="white"
+              target="_blank"
+            >e德互联</a>
           </dd>
         </dl>
       </div>
-    </div>
+    </footer>
   </div>
 </template>
 <script>
@@ -159,46 +127,83 @@ export default {
   head() {
     return {
       title: this.$L(this.currentPath.displayName) + ' - ' + this.companyInfo.appName,
-      meta: [{ hid: 'description', name: 'description', content: 'hi-Sen' }]
+      meta: [{ hid: 'description', name: 'description', content: 'hi-Sen' }],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
     }
   },
   data() {
     return {
       slide: 0,
       sliding: null,
-      isWeixinShow: false
+      isWeixinShow: false,
+      swiperOption: {
+        pagination: {
+          el: '.swiper-pagination'
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        autoHeight: true,
+        on: {
+          slideChange() {},
+          tap() {}
+        }
+      }
     }
   },
   computed: {
     ...mapState({
+      location: state => state.location,
       abp: state => state.abp,
       companyInfo: state => state.app.companyInfo,
       navbars: state => state.app.navbars,
       currentPath: state => state.app.currentPath,
       currentPathParent: state => state.app.currentPathParent,
-      partners: state => state.app.partners,
+      breadCrumbItems: state => state.app.breadCrumbItems,
       bannerImgs: state =>
         state.app.currentPath.bannerImgs.length > 0
           ? state.app.currentPath.bannerImgs
           : state.app.currentPathParent.bannerImgs
-    })
+    }),
+    title() {
+      return this.$L(this.currentPath.displayName)
+    },
+    Address() {
+      return this.$L(`Address`)
+    },
+    Tel() {
+      return this.$L(`Tel`)
+    },
+    Email() {
+      return this.$L(`Email`)
+    },
+    notHome() {
+      return this.currentPath.url.toLowerCase() !== '/main/home'
+    }
   },
   watch: {
     $route(val) {
-      this.setcurrentPath(this.$route.path)
+      this.setcurrentPath({ path: this.$route.path })
     }
   },
   asyncData(context) {
     return { name: 'Main', userAgent: context.userAgent }
   },
-  async fetch(context) {
-    await context.store.dispatch('app/getPartner')
-  },
   created() {
-    this.setcurrentPath(this.$route.path)
+    this.setcurrentPath({ path: this.$route.path })
   },
-
+  mounted() {},
   methods: {
+    changeLanguage() {
+      let lang = `en`
+      if (this.location.culture === 'en') lang = `zh-CN`
+      this.$cookies.set(this.location.headerName, lang, {
+        path: this.abp.appPath || '/',
+        maxAge: 5 * 365 * 86400000
+      })
+      window.location.href = '/'
+    },
     ...mapActions({ setcurrentPath: 'app/setcurrentPath' }),
     go(url) {
       this.$router.push({ path: url })

@@ -18,7 +18,7 @@
         <li
           v-for="item in pageContent.items"
           :key="item.id"
-          @click="goNewsDetail(item.id,1)"
+          @click="goNewsDetail(item.id,2)"
         >
           <img :src="item.cover" />
           <span class="cover-title">

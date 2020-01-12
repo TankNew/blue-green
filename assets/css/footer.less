@@ -1,85 +1,66 @@
 // out: false
 @import 'base.less';
-
 footer {
-  background-image: linear-gradient(75deg, @orange 15%, @cherry 95%);
-  color: #fff;
-  min-height: 240px;
-  .footer-nav {
-    display: none;
-  }
-  .partner {
-    display: none;
-  }
+  background-color: @blue;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
   .contact-info {
-    text-align: center;
-    padding: 20px;
+    display: none;
   }
-  @media (min-width: 768px) {
+  .icp {
     padding: 20px;
-    min-height: 350px;
-    .footer-nav {
-      list-style: none;
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding-left: 0;
-    }
-    li {
-      width: 200px;
-      dt {
-        font-size: 140%;
-        margin-bottom: 10px;
-      }
-    }
-    .contact-info {
-      text-align: left;
-      padding: 0;
-      h5 {
-        font-size: 140%;
-        font-weight: bold;
-      }
-    }
-    .partner {
-      display: block;
-      dt {
-        font-size: 140%;
-        margin-bottom: 10px;
-      }
+    dl {
+      margin-bottom: 0;
       dd {
-        display: inline-block;
-        margin: 6px 6px 6px 0;
-        text-align: center;
-        a {
-          img {
-            height: 48px;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-          }
-          span {
-            display: inline-block;
-            padding: 4px;
+        margin: 0;
+      }
+    }
+  }
+  @media (min-width: 992px) {
+    min-height: 200px;
+    background-image: url('~assets/imgs/yedi.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    .contact-info {
+      display: block;
+      flex-grow: 1;
+      width: 100%;
+      padding: 20px;
+      border-bottom: 1px solid @light-blue;
+      ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        li {
+          padding: 20px 40px;
+          width: 30%;
+          font-size: 14px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          &:not(:last-child) {
+            border-right: 1px solid @light-blue;
           }
         }
       }
     }
-  }
-}
-.footer-bottom {
-  display: none;
-  @media (min-width: 768px) {
-    display: block;
-    background-color: #e9ecef;
-    dl {
-      margin-bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: row;
-      dd {
-        padding: 12px;
-        margin: 0 10px;
+    .icp {
+      padding: 20px;
+      dl {
+        margin-bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        dd {
+          padding: 12px;
+          margin: 0 10px;
+        }
       }
     }
   }

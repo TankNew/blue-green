@@ -2,6 +2,7 @@ const state = () => ({
   navbars: [],
   currentPath: {},
   currentPathParent: {},
+  breadCrumbItems: [],
   companyInfo: {},
   partners: [],
   homePage: {}
@@ -26,23 +27,72 @@ const actions = {
       context.commit('setCompanyInfo', res.data.result)
     }
   },
-  setcurrentPath(context, val) {
-    const child = findChild(context.state.navbars, val)
+  setcurrentPath(context, { path, groupId }) {
+    const array = context.state.navbars
+    const home = actions.findChildByUrl(array, `/main/home`)
+    let child = actions.findChildByUrl(array, path)
+
+    if (child === null) {
+      if (groupId) {
+        child = actions.findChildByGroupId(array, groupId)
+      }
+    }
+
     if (child !== null) {
       context.state.currentPath = child
+      actions.changeBreadCrumb(context, home, child)
 
-      let element = null
-      const array = context.state.navbars
       const parentId = context.state.currentPath.parentId
-
-      for (let index = 0; index < array.length; index++) {
-        if (array[index].id === parentId) {
-          element = array[index]
-          break
-        }
-      }
-      context.state.currentPathParent = element
+      context.state.currentPathParent = actions.findParentById(array, parentId)
     }
+  },
+  changeBreadCrumb(context, ...args) {
+    context.state.breadCrumbItems = []
+    for (let i = 0; i < args.length; i++) {
+      context.state.breadCrumbItems.push({
+        text: args[i].displayName,
+        to: args[i].url
+      })
+    }
+  },
+  findChildByUrl(arry, val) {
+    let res = null
+    for (let i = 0; i < arry.length; i++) {
+      if (arry[i].url && val && val.toLowerCase().includes(arry[i].url.toLowerCase())) {
+        res = arry[i]
+        break
+      } else if (arry[i].children && arry[i].children.length > 0) {
+        res = actions.findChildByUrl(arry[i].children, val)
+        if (res) return res
+      }
+    }
+    return res
+  },
+  findChildByGroupId(arry, id) {
+    let res = null
+    for (let i = 0; i < arry.length; i++) {
+      if (arry[i].catalogGroupId && id && arry[i].catalogGroupId === id) {
+        res = arry[i]
+        break
+      } else if (arry[i].children && arry[i].children.length > 0) {
+        res = actions.findChildByGroupId(arry[i].children, id)
+        if (res) return res
+      }
+    }
+    return res
+  },
+  findParentById(arry, id) {
+    let res = null
+    for (let i = 0; i < arry.length; i++) {
+      if (arry[i].id && id && arry[i].id === id) {
+        res = arry[i]
+        break
+      } else if (arry[i].children && arry[i].children.length > 0) {
+        res = actions.findParentById(arry[i].children, id)
+        if (res) return res
+      }
+    }
+    return res
   },
   async getPartner(context) {
     const res = await this.$axios.get('/api/services/app/Partner/GetAll')
@@ -72,20 +122,6 @@ const actions = {
     const res = await this.$axios.get('/api/services/app/Catalog/Get', params)
     if (res.data.success) return res.data.result
   }
-}
-
-const findChild = function(arry, val) {
-  let res = null
-  for (let i = 0; i < arry.length; i++) {
-    if (arry[i].url && val && val.toLowerCase().includes(arry[i].url.toLowerCase())) {
-      res = arry[i]
-      break
-    } else if (arry[i].children && arry[i].children.length > 0) {
-      res = findChild(arry[i].children, val)
-      if (res) return res
-    }
-  }
-  return res
 }
 export default {
   state,
