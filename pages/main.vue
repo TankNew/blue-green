@@ -27,8 +27,7 @@
             <section v-for="item in navbars" :key="item.id">
               <b-nav-item-dropdown
                 v-if="item.children&&item.children.length>0"
-                :class="[currentPath.id===item.id
-                ||(currentPathParent&&currentPathParent.id===item.id)?'active':'']"
+                :class="[currentPath.code&&currentPath.code.includes(item.code)?'active':'']"
                 :text="$L(item.displayName)"
               >
                 <b-dropdown-item
@@ -39,8 +38,7 @@
               </b-nav-item-dropdown>
               <b-nav-item
                 v-else
-                :class="[currentPath.id===item.id
-                ||(currentPathParent&&currentPathParent.id===item.id)?'active':'']"
+                :class="[currentPath.code&&currentPath.code.includes(item.code)?'active':'']"
                 :to="item.url"
               >{{ $L(item.displayName) }}</b-nav-item>
             </section>
@@ -48,30 +46,32 @@
         </b-collapse>
       </b-navbar>
     </header>
-    <section :class="['banner',currentPath.navbarType===5?'':'sub']">
-      <div v-swiper:mySwiper="swiperOption">
-        <div class="swiper-wrapper position-relative">
-          <div
-            v-for="(item, index) in bannerImgs"
-            :key="index"
-            class="swiper-slide"
-          >
-            <img :src="getImgUrl(item.imgUrl)" />
-            <div class="carousel-caption">
-              <div :class="currentFontPosition(item)">
-                <h2>{{ item.title }}</h2>
-                <p>{{ item.subTitle }}</p>
+    <section :class="['banner',currentPath.navbarType!==5?'sub':'']">
+      <client-only>
+        <div v-swiper:mySwiper="swiperOption">
+          <div class="swiper-wrapper position-relative">
+            <div
+              v-for="(item, index) in bannerImgs"
+              :key="index"
+              class="swiper-slide"
+            >
+              <img :src="getImgUrl(item.imgUrl)" />
+              <div class="carousel-caption">
+                <div :class="currentFontPosition(item)">
+                  <h2>{{ item.title }}</h2>
+                  <p>{{ item.subTitle }}</p>
+                </div>
               </div>
             </div>
           </div>
+          <div slot="button-prev" class="swiper-button-prev"></div>
+          <div slot="button-next" class="swiper-button-next"></div>
+          <div class="swiper-pagination"></div>
         </div>
-        <div slot="button-prev" class="swiper-button-prev"></div>
-        <div slot="button-next" class="swiper-button-next"></div>
-        <div class="swiper-pagination"></div>
-      </div>
+      </client-only>
     </section>
     <section class="main">
-      <div v-if="notHome" class="container mt-2">
+      <div v-if="!currentPath.isHome" class="container mt-2 breadCrumb">
         <b-breadcrumb :items="breadCrumbItems"></b-breadcrumb>
       </div>
       <nuxt-child ref="main" />
@@ -126,9 +126,12 @@ import AppConsts from '../utiltools/appconst'
 export default {
   head() {
     return {
-      title: this.$L(this.currentPath.displayName) + ' - ' + this.companyInfo.appName,
-      meta: [{ hid: 'description', name: 'description', content: 'hi-Sen' }],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+      title: this.currentPath.displayName + ' - ' + this.companyInfo.appName + '-' + this.companyInfo.seoKeyWords,
+      meta: [
+        { hid: 'keywords', name: 'keywords', content: this.companyInfo.seoKeyWords },
+        { hid: 'description', name: 'description', content: this.companyInfo.description }
+      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: this.companyInfo.icon }]
     }
   },
   data() {
@@ -162,9 +165,11 @@ export default {
       currentPathParent: state => state.app.currentPathParent,
       breadCrumbItems: state => state.app.breadCrumbItems,
       bannerImgs: state =>
-        state.app.currentPath.bannerImgs.length > 0
-          ? state.app.currentPath.bannerImgs
-          : state.app.currentPathParent.bannerImgs
+        state.app.currentPath.bannerImgs
+          ? state.app.currentPath.bannerImgs.length > 0
+            ? state.app.currentPath.bannerImgs
+            : state.app.currentPathParent.bannerImgs
+          : []
     }),
     title() {
       return this.$L(this.currentPath.displayName)
@@ -177,9 +182,6 @@ export default {
     },
     Email() {
       return this.$L(`Email`)
-    },
-    notHome() {
-      return this.currentPath.url.toLowerCase() !== '/main/home'
     }
   },
   watch: {
@@ -193,7 +195,8 @@ export default {
   created() {
     this.setcurrentPath({ path: this.$route.path })
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     changeLanguage() {
       let lang = `en`

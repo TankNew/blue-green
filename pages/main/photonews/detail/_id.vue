@@ -63,8 +63,14 @@ export default {
   },
   computed: {
     ...mapState({
-      currentPath: state => state.app.currentPath
+      currentPath: state => state.app.currentPath,
+      companyInfo: state => state.app.companyInfo
     })
+  },
+  head() {
+    return {
+      title: this.catalogItem.title + ' - ' + this.companyInfo.appName + '-' + this.companyInfo.seoKeyWords
+    }
   },
   async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
     const id = route.params.id
@@ -84,7 +90,10 @@ export default {
     return { catalogItem, path }
   },
   created() {
-    this.$store.dispatch('app/setcurrentPath', { path: this.path, groupId: this.catalogItem.catalogGroup.parentId })
+    this.$store.dispatch('app/setcurrentPath', {
+      path: this.path,
+      code: this.catalogItem.catalogGroup.code
+    })
   },
   mounted() {
     this.$nextTick(() => (this.isloaded = true))

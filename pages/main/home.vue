@@ -13,7 +13,7 @@
             <div class="word-group-1-info">
               <div class="info">
                 <h3>{{ item.displayName }}</h3>
-                <p>Zhengbang Huitong (Tianjin) International Trade Co., Ltd. was incorporated in the Tianjin Free Trade Zone in early October 2016. It is a Sino-US joint venture trading company established by domestic natural investors and Americans. Mr. Li Zhi, the main investor (chairman) of Zhengbang Huitong (Tianjin) International Trade Co., Ltd., was the corporation and the main equity holder of Tianjin Zhengbang Industry and Trade Development Co., Ltd.</p>
+                <p>{{ item.info }}</p>
               </div>
               <a
                 @click="goNewsGroup(item.id,1)"
@@ -22,28 +22,31 @@
             </div>
             <div class="word-group-1-cover">
               <img :src="item.cover" class="cover" />
-              <h3>{{ item.displayName }}</h3>
+              <h3>
+                <span>{{ item.displayName }}</span>
+              </h3>
             </div>
           </div>
           <div @click="goNewsGroup(item.id,1)" class="word-group-1-icon">
-            <img
-              src="https://cms.ednet.cn/UserFiles/zhengbanght/Images/icon%E5%9B%BE%E6%A0%87/jinghua.svg"
-              class="icon"
-            />
+            <img :src="item.icon" class="icon" />
             <span>{{ item.displayName }}</span>
           </div>
         </li>
       </ul>
     </div>
     <div class="product-group-1">
-      <h5>
+      <h5 class="container">
         <i class="fas fa-bookmark" />
         {{ productGroup1.displayName }}
       </h5>
       <dl ref="postion" class="product-sub-group">
         <dd v-for="(item,index) in productGroup1.children">
           <div>
-            <a :href="'/Product/'+item.id" class="icon" target="_blank">
+            <a
+              @click="goNewsGroup(item.id,3)"
+              class="icon"
+              href="javascript:void(0)"
+            >
               <img :src="item.icon" />
             </a>
             <a
@@ -82,10 +85,10 @@
         <div class="ad-content">
           <h3 class="ad-title">{{ ad1.title }}</h3>
           <p class="ad-text">{{ ad1.text }}</p>
-          <nuxt-link
-            :to="ad1.url?ad1.url:'/'"
+          <a
+            :href="ad1.url?ad1.url:'/'"
             class="green-btn white ml-2 px-5 py-2"
-          >{{ $L(`More`) }}</nuxt-link>
+          >{{ $L(`More`) }}</a>
         </div>
       </div>
     </div>

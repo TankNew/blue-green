@@ -20,7 +20,9 @@
           :key="item.id"
           @click="goNewsDetail(item.id,2)"
         >
-          <img :src="item.cover" />
+          <span class="cover">
+            <img :src="item.cover" />
+          </span>
           <span class="cover-title">
             <a href="javascript:void(0)">{{ item.title }}</a>
           </span>

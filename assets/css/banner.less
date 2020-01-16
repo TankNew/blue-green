@@ -47,7 +47,7 @@
     background-size: 100% 100%;
   }
   .swiper-button-next {
-    right: 27px;
+    right: 0;
     background: url(~assets/imgs/right.png) center center no-repeat;
     background-size: 100% 100%;
   }
@@ -78,6 +78,7 @@
     }
   }
   &.sub {
+    display: none;
     .carousel-item > img {
       max-width: (960/300) * 100%;
       width: (960/300) * 100% !important;
@@ -92,7 +93,7 @@
       left: 10%;
     }
     .swiper-button-next {
-      right: calc(10% + 27px);
+      right: 10%;
     }
     h2 {
       font-size: 300%;
@@ -111,6 +112,7 @@
       }
     }
     &.sub {
+      display: block;
       padding-bottom: (300/1920) * 100%;
       .carousel {
         padding-bottom: (300/1920) * 100%;

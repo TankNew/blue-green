@@ -1,9 +1,9 @@
 const state = () => ({
+  companyInfo: {},
   navbars: [],
   currentPath: {},
   currentPathParent: {},
   breadCrumbItems: [],
-  companyInfo: {},
   partners: [],
   homePage: {}
 })
@@ -12,41 +12,40 @@ const mutations = {
     state.companyInfo = val
   }
 }
-
+let parents = []
 const actions = {
-  async getNavbars(context) {
-    const res = await this.$axios.get('/api/services/app/Navbar/GetAll')
-    if (res.data.success) {
-      context.state.navbars = res.data.result[0].children
-      context.state.currentPath = context.state.navbars[0]
-    }
-  },
-  async getCompanyInfo(context) {
-    const res = await this.$axios.get('/api/services/app/CompanyInfo/GetOrCreate')
-    if (res.data.success) {
-      context.commit('setCompanyInfo', res.data.result)
-    }
-  },
-  setcurrentPath(context, { path, groupId }) {
+  setcurrentPath(context, { path, grandId }) {
+    const homePath = `/main/home`
     const array = context.state.navbars
-    const home = actions.findChildByUrl(array, `/main/home`)
-    let child = actions.findChildByUrl(array, path)
-
-    if (child === null) {
-      if (groupId) {
-        child = actions.findChildByGroupId(array, groupId)
+    const home = actions.findChildByUrl(array, homePath)
+    if (path.toLowerCase() === homePath) {
+      home.isHome = true
+      context.state.currentPath = home
+    } else {
+      let child = actions.findChildByUrl(array, path)
+      if (child === null) {
+        if (grandId) {
+          child = actions.findChildByGroupId(array, grandId)
+        }
+      }
+      if (child !== null) {
+        parents = []
+        actions.findParentsByCode(array, child.code)
+        parents = parents.sort((a, b) => a.code.length - b.code.length)
+        context.state.currentPath = child
+        actions.setBreadCrumb(context, home, ...parents)
+        let currentPathParent = null
+        for (let i = parents.length - 1; i > -1; i--) {
+          if (parents[i].bannerImgs && parents[i].bannerImgs.length > 0) {
+            currentPathParent = parents[i]
+            break
+          }
+        }
+        context.state.currentPathParent = currentPathParent
       }
     }
-
-    if (child !== null) {
-      context.state.currentPath = child
-      actions.changeBreadCrumb(context, home, child)
-
-      const parentId = context.state.currentPath.parentId
-      context.state.currentPathParent = actions.findParentById(array, parentId)
-    }
   },
-  changeBreadCrumb(context, ...args) {
+  setBreadCrumb(context, ...args) {
     context.state.breadCrumbItems = []
     for (let i = 0; i < args.length; i++) {
       context.state.breadCrumbItems.push({
@@ -71,7 +70,7 @@ const actions = {
   findChildByGroupId(arry, id) {
     let res = null
     for (let i = 0; i < arry.length; i++) {
-      if (arry[i].catalogGroupId && id && arry[i].catalogGroupId === id) {
+      if (arry[i].catalogGroupId && id && id === arry[i].catalogGroupId) {
         res = arry[i]
         break
       } else if (arry[i].children && arry[i].children.length > 0) {
@@ -81,18 +80,27 @@ const actions = {
     }
     return res
   },
-  findParentById(arry, id) {
-    let res = null
+  findParentsByCode(arry, code) {
     for (let i = 0; i < arry.length; i++) {
-      if (arry[i].id && id && arry[i].id === id) {
-        res = arry[i]
-        break
-      } else if (arry[i].children && arry[i].children.length > 0) {
-        res = actions.findParentById(arry[i].children, id)
-        if (res) return res
+      if (arry[i].code && code && code.includes(arry[i].code)) {
+        parents.push(arry[i])
+      }
+      if (arry[i].children && arry[i].children.length > 0) {
+        actions.findParentsByCode(arry[i].children, code)
       }
     }
-    return res
+  },
+  async getNavbars(context) {
+    const res = await this.$axios.get('/api/services/app/Navbar/GetAll')
+    if (res.data.success) {
+      context.state.navbars = res.data.result[0].children
+    }
+  },
+  async getCompanyInfo(context) {
+    const res = await this.$axios.get('/api/services/app/CompanyInfo/GetOrCreate')
+    if (res.data.success) {
+      context.commit('setCompanyInfo', res.data.result)
+    }
   },
   async getPartner(context) {
     const res = await this.$axios.get('/api/services/app/Partner/GetAll')
@@ -112,6 +120,10 @@ const actions = {
   },
   async getCatalogGroupList(context, params) {
     const res = await this.$axios.get('/api/services/app/CatalogGroup/GetAll', params)
+    if (res.data.success) return res.data.result
+  },
+  async getCatalogGroup(context, params) {
+    const res = await this.$axios.get('/api/services/app/CatalogGroup/Get', params)
     if (res.data.success) return res.data.result
   },
   async getCatalogList(context, params) {

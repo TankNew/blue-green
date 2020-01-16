@@ -3,13 +3,13 @@ version: '3.4'
 # docker push docker.ednet.cn/ednetcms-panel
 services:
   ydnyx:
-    image: docker.ednet.cn/ydnyx
-    container_name: ydnyx
+    image: docker.ednet.cn/blue-green
+    container_name: blue-green
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5111:80'
+      - '5112:80'
 networks:
   default:
     external:
