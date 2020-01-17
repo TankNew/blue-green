@@ -102,9 +102,12 @@ const actions = {
       context.commit('setCompanyInfo', res.data.result)
     }
   },
-  async getPartner(context) {
-    const res = await this.$axios.get('/api/services/app/Partner/GetAll')
-    if (res.data.success) context.state.partners = res.data.result
+  async getPartner(context, params) {
+    const res = await this.$axios.get('/api/services/app/Partner/GetAll', params)
+    if (res.data.success) {
+      context.state.partners = res.data.result
+      return res.data.result
+    }
   },
   async getHomePage(context) {
     const res = await this.$axios.get('/api/services/app/HomePage/GetOrCreate')

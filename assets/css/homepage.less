@@ -80,7 +80,6 @@
           display: none;
         }
         .word-group-1-info {
-          transition: opacity 0.5s ease-out;
           position: absolute;
           top: 0;
           left: 0;
@@ -135,7 +134,7 @@
         &.active {
           width: calc(50% - 20px);
           .word-group-1-info {
-            transition: opacity 1s ease-out;
+            transition: opacity 0.5s ease-out 0.1s;
             opacity: 1;
             padding: 20px;
             width: 50%;
@@ -399,7 +398,7 @@
           border-radius: 50%;
         }
         span {
-          display: inline-block;
+          display: block;
           padding: 4px;
         }
       }

@@ -166,7 +166,14 @@ export default {
     this.observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0) {
-          this.$store.dispatch('app/getPartner')
+          const param = {
+            params: {
+              IsActive: true,
+              SkipCount: 0,
+              MaxResultCount: 8
+            }
+          }
+          this.$store.dispatch('app/getPartner', param)
           entry.target.classList.add('fancy')
           this.observer.unobserve(entry.target)
         }

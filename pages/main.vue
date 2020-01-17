@@ -105,8 +105,26 @@
       </div>
       <div class="container icp">
         <dl>
-          <dd>{{ companyInfo.appName }}</dd>
-          <dd>津ICP备案</dd>
+          <dt>{{ companyInfo.appName }}</dt>
+          <dd v-for="item in companyInfo.icps">
+            <a
+              class="gongan white"
+              target="_blank"
+              href="http://beian.miit.gov.cn/publish/query/indexFirst.action"
+            >
+              <p>津ICP备{{ item }}</p>
+            </a>
+          </dd>
+          <dd v-for="item in companyInfo.gongAns">
+            <a
+              :href="`http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${item}`"
+              class="gongan white"
+              target="_blank"
+            >
+              <img src="@/assets/imgs/gongan.png" />
+              <p>津公网安备{{ item }}号</p>
+            </a>
+          </dd>
           <dd>
             技术支持：
             <a
@@ -195,8 +213,7 @@ export default {
   created() {
     this.setcurrentPath({ path: this.$route.path })
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     changeLanguage() {
       let lang = `en`

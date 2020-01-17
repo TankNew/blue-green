@@ -75,7 +75,7 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 const c = 1
-const p = 10
+const p = 8
 export default {
   data() {
     return {
