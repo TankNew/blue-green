@@ -467,14 +467,14 @@ ul {
       z-index: 2;
       text-decoration: none;
       color: white;
-      background-color: @dark-orange;
-      border-color: @orange;
+      background-color: @dark-blue;
+      border-color: @blue;
     }
 
     &:focus {
       z-index: 3;
       // outline: $pagination-focus-outline;
-      box-shadow: 0 1px 2px @orange;
+      box-shadow: 0 1px 2px @blue;
     }
   }
   .news-detail {
@@ -494,6 +494,9 @@ ul {
       overflow: hidden;
       @media (min-width: 768px) {
         max-width: 480px;
+      }
+      @media (min-width: 992px) {
+        max-width: 640px;
       }
       .swiper-slide {
         position: relative;
