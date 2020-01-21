@@ -266,7 +266,7 @@ export default {
           params: {
             CatalogGroupId: this.productGroup1.id,
             SkipCount: 0,
-            MaxResultCount: 8,
+            MaxResultCount: 10,
             Sorting: 'IsTop DESC, Number DESC'
           }
         }
