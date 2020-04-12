@@ -86,6 +86,7 @@ export default {
   },
   computed: {
     ...mapState({
+      culture: state => state.app.culture,
       navbars: state => state.app.navbars,
       currentPath: state => state.app.currentPath,
       currentPathParent: state => state.app.currentPathParent
@@ -113,13 +114,13 @@ export default {
     goNewsGroup(id, type) {
       switch (type) {
         case 1:
-          this.$router.push('/main/news/' + String(id))
+          this.$router.push(`/${this.culture}/news/` + String(id))
           break
         case 2:
-          this.$router.push('/main/photonews/' + String(id))
+          this.$router.push(`/${this.culture}/photonews/` + String(id))
           break
         case 3:
-          this.$router.push('/main/product/' + String(id))
+          this.$router.push(`/${this.culture}/product/` + String(id))
           break
       }
     },
@@ -136,7 +137,7 @@ export default {
           typename = 'product'
           break
       }
-      window.open('/main/' + typename + '/detail/' + String(id), '_blank')
+      window.open(`/${this.culture}/` + typename + '/detail/' + String(id), '_blank')
     },
     async pageChange() {
       const params = {

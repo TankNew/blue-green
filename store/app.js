@@ -5,20 +5,30 @@ const state = () => ({
   currentPathParent: {},
   breadCrumbItems: [],
   partners: [],
-  homePage: {}
+  homePage: {},
+  culture: '',
+  headerName: '.AspNetCore.Culture'
 })
 const mutations = {
   setCompanyInfo(state, val) {
     state.companyInfo = val
+  },
+  setCulture(state, val) {
+    state.culture = val
+  }
+}
+const getters = {
+  getCulture(state) {
+    return state.culture
   }
 }
 let parents = []
 const actions = {
   setcurrentPath(context, { path, grandId }) {
-    const homePath = `/main/home`
+    const homePath = `/${context.state.culture}/home`
     const array = context.state.navbars
     const home = actions.findChildByUrl(array, homePath)
-    if (path.toLowerCase() === homePath) {
+    if (path.toLowerCase() === homePath.toLowerCase()) {
       home.isHome = true
       context.state.currentPath = home
     } else {
@@ -141,5 +151,6 @@ const actions = {
 export default {
   state,
   mutations,
+  getters,
   actions
 }

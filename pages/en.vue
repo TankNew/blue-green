@@ -175,7 +175,6 @@ export default {
   },
   computed: {
     ...mapState({
-      location: state => state.location,
       abp: state => state.abp,
       companyInfo: state => state.app.companyInfo,
       navbars: state => state.app.navbars,
@@ -207,7 +206,15 @@ export default {
       this.setcurrentPath({ path: this.$route.path })
     }
   },
-  asyncData(context) {
+  async asyncData(context) {
+    let language = `en`
+    context.app.$cookies.set(context.store.state.app.headerName, language, {
+      path: context.store.state.abp.appPath || '/',
+      maxAge: 5 * 365 * 86400000
+    })
+    context.store.commit('app/setCulture', language)
+    await context.store.dispatch('app/getCompanyInfo')
+    await context.store.dispatch('app/getNavbars')
     return { name: 'Main', userAgent: context.userAgent }
   },
   created() {
@@ -216,13 +223,8 @@ export default {
   mounted() {},
   methods: {
     changeLanguage() {
-      let lang = `en`
-      if (this.location.culture === 'en') lang = `zh-CN`
-      this.$cookies.set(this.location.headerName, lang, {
-        path: this.abp.appPath || '/',
-        maxAge: 5 * 365 * 86400000
-      })
-      window.location.href = '/'
+      let lang = `zh-CN`
+      window.location.href = '/' + lang + '/home'
     },
     ...mapActions({ setcurrentPath: 'app/setcurrentPath' }),
     go(url) {

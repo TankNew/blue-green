@@ -1,7 +1,7 @@
 export default function({ $axios, store, app, redirect }) {
   $axios.onRequest(
     config => {
-      config.headers.common[store.state.location.headerName] = store.getters['location/getCulture']
+      config.headers.common[store.state.app.headerName] = store.getters['app/getCulture']
 
       /**开发测试 */
       const multiTenancyHeader = 'Abp.TenantId'

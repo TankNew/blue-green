@@ -16,7 +16,7 @@ export default {
     async fetch(context) {
         const ip = (await axios.get('http://icanhazip.com')).data
         context.store.dispatch('setIp', ip)
-        context.redirect('/main/home')
+        context.redirect('/en/home')
         // The fetch method is used to fill the store before rendering the page
     }
 }

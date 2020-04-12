@@ -63,6 +63,7 @@ export default {
   },
   computed: {
     ...mapState({
+      culture: state => state.app.culture,
       currentPath: state => state.app.currentPath,
       companyInfo: state => state.app.companyInfo
     })
@@ -75,7 +76,7 @@ export default {
   async asyncData({ isDev, route, store, env, params, query, req, res, redirect, error }) {
     const id = route.params.id
     const catalogItem = await store.dispatch('app/getCatalog', { params: { id } })
-    let path = '/main/'
+    let path = `/${store.app.culture}/`
     switch (catalogItem.catalogGroup.catalogType) {
       case 1:
         path += 'news/' + catalogItem.catalogGroup.id
