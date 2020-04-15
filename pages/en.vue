@@ -6,8 +6,8 @@
           <i class="fas fa-phone-alt mr-1"></i>
           {{ companyInfo.tel }}
         </div>
-        <div>
-          <a @click="changeLanguage" class="green-btn">中/EN</a>
+        <div @click="changeLanguage">
+          <a class="green-btn">中/EN</a>
         </div>
       </div>
       <div class="header-title container">
@@ -15,8 +15,8 @@
           <img :src="companyInfo.logo" />
         </div>
         <div class="company-name">{{ companyInfo.appName }}</div>
-        <div class="toolbar">
-          <a @click="changeLanguage">中/EN</a>
+        <div @click="changeLanguage" class="toolbar">
+          <a>中/EN</a>
         </div>
       </div>
       <b-navbar toggleable="lg" type="blue" variant="blue">

@@ -34,6 +34,7 @@ const actions = {
       const json = data.data.result
       json.localization.defaultSourceName = appconst.localization.defaultLocalizationSourceName
       context.state.abp = json
+      console.log(json)
     })
   }
 }
