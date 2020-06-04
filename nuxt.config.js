@@ -32,13 +32,13 @@ export default {
     // link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   router: {
-    scrollBehavior(to, from, savedPosition) {
-      if (savedPosition) {
-        return savedPosition
-      } else {
-        return { x: 0, y: 0 }
-      }
-    },
+    // scrollBehavior(to, from, savedPosition) {
+    //   if (savedPosition) {
+    //     return savedPosition
+    //   } else {
+    //     return { x: 0, y: 0 }
+    //   }
+    // },
     middleware: ['user-agent'],
     // 配置路由的模式，鉴于服务端渲染的特性，不建议修改该配置
     mode: 'history'
